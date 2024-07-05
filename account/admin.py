@@ -1,12 +1,11 @@
 from django.contrib import admin
-from .models import CustomUser, Industry, Shareholder, Investor, Founder, Advisor
+from .models import CustomUser, Industry, Investing, Founding, Advising
 from django.contrib.auth.hashers import make_password
 
 admin.site.register(Industry)
-admin.site.register(Shareholder)
-admin.site.register(Investor)
-admin.site.register(Founder)
-admin.site.register(Advisor)
+admin.site.register(Investing)
+admin.site.register(Founding)
+admin.site.register(Advising)
 
 class CustomUserAdmin(admin.ModelAdmin):
     # Hash the passwd 

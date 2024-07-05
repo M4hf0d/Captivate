@@ -15,27 +15,14 @@ from .models import *
 from .serializers import *
 
 
-class ShareholderViewSet(viewsets.ModelViewSet):
+
+
+
+class AdvisingViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend]
     # filterset_fields = [""]
-    queryset = Shareholder.objects.all()
-    def get_serializer_class(self):
-        if (
-            self.request.method == "POST"
-            or self.request.method == "PUT"
-            or self.request.method == "PATCH"
-        ):
-            return ShareholderSerializer
-        return ShareholderListSerializer
-
-
-
-class AdvisorViewSet(viewsets.ModelViewSet):
-
-    filter_backends = [DjangoFilterBackend]
-    # filterset_fields = [""]
-    queryset = Advisor.objects.all()
+    queryset = Advising.objects.all()
 
     def get_serializer_class(self):
         if (
@@ -43,15 +30,15 @@ class AdvisorViewSet(viewsets.ModelViewSet):
             or self.request.method == "PUT"
             or self.request.method == "PATCH"
         ):
-            return AdvisorSerializer
-        return AdvisorListSerializer
+            return AdvisingSerializer
+        return AdvisingListSerializer
     
     
-class FounderViewSet(viewsets.ModelViewSet):
+class FoundingViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend]
     # filterset_fields = [""]
-    queryset = Founder.objects.all()
+    queryset = Founding.objects.all()
 
     def get_serializer_class(self):
         if (
@@ -59,21 +46,21 @@ class FounderViewSet(viewsets.ModelViewSet):
             or self.request.method == "PUT"
             or self.request.method == "PATCH"
         ):
-            return FounderSerializer
-        return FounderListSerializer
+            return FoundingSerializer
+        return FoundingListSerializer
 
 
     
-class InvestorViewSet(viewsets.ModelViewSet):
+class InvestingViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend]
     # filterset_fields = [""]
-    queryset = Investor.objects.all()
+    queryset = Investing.objects.all()
     def get_serializer_class(self):
         if (
             self.request.method == "POST"
             or self.request.method == "PUT"
             or self.request.method == "PATCH"
         ):
-            return InvestorSerializer
-        return InvestorListSerializer
+            return InvestingSerializer
+        return InvestingListSerializer

@@ -4,10 +4,9 @@ from .views import *
 
 
 router = DefaultRouter()
-router.register(r'shareholders', ShareholderViewSet, basename='shareholder')
-router.register(r'advisors', AdvisorViewSet, basename='advisor')
-router.register(r'founders', FounderViewSet, basename='founder')
-router.register(r'investors', InvestorViewSet, basename='investor')
+router.register(r'Advisings', AdvisingViewSet, basename='Advising')
+router.register(r'Foundings', FoundingViewSet, basename='Founding')
+router.register(r'Investings', InvestingViewSet, basename='Investing')
 
 urlpatterns = [
     path("", include(router.urls)),

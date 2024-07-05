@@ -1,28 +1,14 @@
 from rest_framework import serializers
+from .models import  Investing, Founding, Advising, CustomUser
 from drf_writable_nested import WritableNestedModelSerializer
 
-from .models import *
-from rest_framework import serializers
 
 class CustomUserUserSerializer(WritableNestedModelSerializer):
     image = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
-        fields = [
-            "id",
-            "first_name",
-            "last_name",
-            "phone_number",
-            "email",
-            "last_login",
-            "onboarded",
-            "password",
-            "image",
-            "sex",
-            "address",
-            "image_path",
-        ]
+        fields = "__all__"
         extra_kwargs = {
             "password": {"write_only": True},
             "id": {"read_only": True, "required": False},
@@ -47,65 +33,12 @@ class CustomUserUserSerializer(WritableNestedModelSerializer):
         if password:
             instance.set_password(password)
         return super().update(instance, validated_data)
-    
 
-class ShareholderSerializer(WritableNestedModelSerializer):
+class InvestingSerializer(WritableNestedModelSerializer):
     user = CustomUserUserSerializer(partial=True)
 
     class Meta:
-        model = Shareholder
-        fields = "__all__"
-
-
-
-    def update(self, instance, validated_data):
-        user_data = validated_data.pop("user", {})
-        for key, value in user_data.items():
-            setattr(instance.user, key, value)
-        instance.user.save()
-        instance.save()
-        return super().update(instance, validated_data)
-
-
-class ShareholderListSerializer(WritableNestedModelSerializer):
-    user = CustomUserUserSerializer(partial=True)
-
-    class Meta:
-        model = Shareholder
-        fields = "__all__"
-
-class InvestorSerializer(WritableNestedModelSerializer):
-    user = CustomUserUserSerializer(partial=True)
-
-    class Meta:
-        model = Investor
-        fields = "__all__"
-
-
-
-    def update(self, instance, validated_data):
-        user_data = validated_data.pop("user", {})
-        for key, value in user_data.items():
-            setattr(instance.user, key, value)
-        instance.user.save()
-        instance.save()
-        return super().update(instance, validated_data)
-
-
-class InvestorListSerializer(WritableNestedModelSerializer):
-    user = CustomUserUserSerializer(partial=True)
-
-    class Meta:
-        model = Investor
-        fields = "__all__"
-
-
-
-class FounderSerializer(WritableNestedModelSerializer):
-    user = CustomUserUserSerializer(partial=True)
-
-    class Meta:
-        model = Founder
+        model = Investing
         fields = "__all__"
 
     def update(self, instance, validated_data):
@@ -116,22 +49,19 @@ class FounderSerializer(WritableNestedModelSerializer):
         instance.save()
         return super().update(instance, validated_data)
 
-
-class FounderListSerializer(WritableNestedModelSerializer):
+class InvestingListSerializer(serializers.ModelSerializer):
     user = CustomUserUserSerializer(partial=True)
 
     class Meta:
-        model = Founder
+        model = Investing
         fields = "__all__"
 
-class AdvisorSerializer(WritableNestedModelSerializer):
+class FoundingSerializer(WritableNestedModelSerializer):
     user = CustomUserUserSerializer(partial=True)
 
     class Meta:
-        model = Advisor
+        model = Founding
         fields = "__all__"
-
-
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user", {})
@@ -141,10 +71,31 @@ class AdvisorSerializer(WritableNestedModelSerializer):
         instance.save()
         return super().update(instance, validated_data)
 
-
-class AdvisorListSerializer(WritableNestedModelSerializer):
+class FoundingListSerializer(serializers.ModelSerializer):
     user = CustomUserUserSerializer(partial=True)
 
     class Meta:
-        model = Shareholder
+        model = Founding
+        fields = "__all__"
+
+class AdvisingSerializer(WritableNestedModelSerializer):
+    user = CustomUserUserSerializer(partial=True)
+
+    class Meta:
+        model = Advising
+        fields = "__all__"
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user", {})
+        for key, value in user_data.items():
+            setattr(instance.user, key, value)
+        instance.user.save()
+        instance.save()
+        return super().update(instance, validated_data)
+
+class AdvisingListSerializer(serializers.ModelSerializer):
+    user = CustomUserUserSerializer(partial=True)
+
+    class Meta:
+        model = Advising
         fields = "__all__"

@@ -45,6 +45,7 @@ DJANGO_APPS = [
 
 EXTERNAL_APPS = [
     # "daphne",
+    "django_tenants",
     "drf_yasg",
     "corsheaders",
     "djoser",
@@ -53,11 +54,19 @@ EXTERNAL_APPS = [
 ]
 OWN_APPS = [
     "account",
+    "publicapp",
 ]
 
-INSTALLED_APPS = OWN_APPS + EXTERNAL_APPS + DJANGO_APPS
+SHARED_APPS = EXTERNAL_APPS + OWN_APPS + DJANGO_APPS 
+
+
+TENANT_APPS = ["clientapp"]
+
+INSTALLED_APPS = SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
+
 
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -92,12 +101,25 @@ WSGI_APPLICATION = 'Captivate.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+        'default': {
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': 5432
     }
 }
 
+DATABASE_ROUTERS = (
+
+'django_tenants.routers.TenantSyncRouter',
+
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -162,7 +184,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=90),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
-    "TOKEN_OBTAIN_SERIALIZER": "accounts.serializers.MyTokenObtainPairSerializer",
+    # "TOKEN_OBTAIN_SERIALIZER": "accounts.serializers.MyTokenObtainPairSerializer",
     # 'BLACKLIST_AFTER_ROTATION': True,
     # 'ALGORITHM': 'HS256',
     # 'SIGNING_KEY': settings.SECRET_KEY,
@@ -224,3 +246,13 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Bottom
+TENANT_MODEL = "publicapp.Client"
+
+
+
+TENANT_DOMAIN_MODEL = "publicapp.Domain"
+
+
+
+PUBLIC_SCHEMA_URLCONF = "publicapp.urls"

@@ -13,9 +13,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="EduLink API",
+        title="Captivate APi",
         default_version="v1",
-        description="You will find here all the endpoints you'll need to use the api =) ",
+        description="Captivate API Documentation",
     ),
     public=True,
     permission_classes=[permissions.AllowAny],

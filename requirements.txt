@@ -12,3 +12,5 @@ daphne==4.1.0
 django-model-utils==4.4.0
 python-dotenv==1.0.1
 cloudinary==1.39.1
+django-tenants==3.6.1
+psycopg2-binary==2.9.9
