@@ -15,14 +15,14 @@ INDUSTRY_TYPES = [
 
 class Client(TenantMixin):
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100 , blank = True, null = True)
 
     created_on = models.DateField(auto_now_add=True)
 
-    stage = models.CharField(choices=COMPANY_STAGES, max_length=100)
-    country = models.CharField(max_length=150)
-    industry = models.CharField(choices=INDUSTRY_TYPES, max_length=100)
-    description = models.TextField()
+    stage = models.CharField(choices=COMPANY_STAGES, max_length=100, blank = True, null = True)
+    country = models.CharField(max_length=150, blank = True, null = True)
+    industry = models.CharField(choices=INDUSTRY_TYPES, max_length=100, blank = True, null = True)
+    description = models.TextField( blank = True, null = True)
     
     # founders = models.ManyToManyField('Founding', through='CompanyFounder', related_name='founded_companies')
     # advisors = models.ManyToManyField('Advising', through='CompanyAdvisor', related_name='advised_companies')
@@ -33,4 +33,5 @@ class Client(TenantMixin):
 
 class Domain(DomainMixin):
 
-    pass
+    def __str__(self):
+        return self.domain

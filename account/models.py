@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-
+from publicapp.models import Client
 from cloudinary.models import CloudinaryField
 from .utils import file_validation
 
@@ -35,24 +35,6 @@ SHAREHOLDER_TYPES = [
     ("board", "Board Member"),
 ]
 
-COMPANY_STAGES = [
-    ("ideation", "Ideation"),
-    ("mvp", "MVP"),
-    ("growth", "Growth"),
-]
-
-
-INDUSTRY_TYPES = [
-    ("finTech", "FinTech"),
-    ("agriTech", "AgriTech"),
-    ("edTech", "EdTech"),
-]
-
-INDUSTRY_TYPES = [
-    ("finTech", "FinTech"),
-    ("agriTech", "AgriTech"),
-    ("edTech", "EdTech"),
-]
 
 COMPANY_POSITIONS = [
     ("founder", "Founder"),
@@ -126,8 +108,8 @@ class Industry(models.Model):
 
 
 class Founding(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name="founders")
-    company = models.ForeignKey("Company", on_delete=models.DO_NOTHING, related_name="founders")
+    user = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name="founder", blank=True, null=True)
+    company = models.ForeignKey(Client, on_delete=models.DO_NOTHING, related_name="founder", blank=True, null=True)
     Role = models.CharField(max_length = 150, null = True, blank = True) 
     Biography = models.TextField(null = True, blank = True)
     ownership = models.DecimalField(max_digits=5, decimal_places=2, blank = True, null = True)
@@ -137,6 +119,8 @@ class Founding(models.Model):
         verbose_name_plural = "Foundings"
 
 class Investing(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name="investor", blank=True, null=True)
+    company = models.ForeignKey(Client, on_delete=models.DO_NOTHING, related_name="investor", blank=True, null=True)
     regain_period = models.DateField(null=True, blank=True)
     best_roi = models.IntegerField(null=True, blank=True)
     maximum_drop_invalue = models.IntegerField(null=True, blank=True)
@@ -162,6 +146,8 @@ class Investing(models.Model):
         verbose_name_plural = "Investings"
 
 class Advising(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name="advisor", blank=True, null=True)
+    company = models.ForeignKey(Client, on_delete=models.DO_NOTHING, related_name="advisor", blank=True, null=True)
     atype = models.CharField(max_length=5, choices=ADVISOR_TYPES)
     ownership = models.DecimalField(max_digits=5, decimal_places=2, blank = True, null = True)
 
@@ -171,17 +157,3 @@ class Advising(models.Model):
 
 
 
-
-class Company(models.Model):
-    name = models.CharField(max_length=150, unique=True)
-    stage = models.CharField(choices=COMPANY_STAGES, max_length=100)
-    country = models.CharField(max_length=150)
-    industry = models.CharField(choices=INDUSTRY_TYPES, max_length=100)
-    description = models.TextField()
-
-    # founders = models.ManyToManyField('Founding', through='CompanyFounder', related_name='founded_companies')
-    # advisors = models.ManyToManyField('Advising', through='CompanyAdvisor', related_name='advised_companies')
-    # investors = models.ManyToManyField('Investing', through='CompanyInvestor', related_name='invested_companies')
-
-    def __str__(self):
-        return self.name

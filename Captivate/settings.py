@@ -247,6 +247,8 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Bottom
+
+
 TENANT_MODEL = "publicapp.Client"
 
 
